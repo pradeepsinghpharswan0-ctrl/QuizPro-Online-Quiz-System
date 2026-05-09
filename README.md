@@ -172,13 +172,14 @@ in browser.
 
 # 📸 Screenshots
 
-Add your screenshots here:
 
 * Homepage
-* Quiz Interface
-* Leaderboard
-* Admin Panel
-* Result Page
+* <img width="1917" height="874" alt="S" src="https://github.com/user-attachments/assets/4e987f97-29bf-4e91-b59d-d78cdfc477b5" />
+
+* About Us
+* <img width="1919" height="885" alt="g" src="https://github.com/user-attachments/assets/c307c21b-e897-4c70-88c6-bbbba89a8a57" />
+
+
 
 ---
 
@@ -214,6 +215,7 @@ Full Stack Developer & Data Science Student
 # 📧 Contact
 
 Email: [anime87566@gmail.com](mailto:anime87566@gmail.com)
+
 Ig:pradeep9.11
 
 ---
