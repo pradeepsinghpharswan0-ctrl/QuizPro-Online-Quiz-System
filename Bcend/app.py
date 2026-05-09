@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from ctypes import CDLL, c_int, POINTER
 from datetime import datetime
 import db
-import os
 
 app = Flask(__name__)
 CORS(app)
@@ -12,16 +10,6 @@ CORS(app)
 
 db.init_db()
 db.seed_questions()
-
-# ---------------- LOAD C DLL ----------------
-
-if os.name == "nt":
-    lib = CDLL("./logic.dll")
-else:
-    lib = CDLL("./logic.so")
-
-lib.calculate_score.argtypes = [POINTER(c_int), POINTER(c_int), c_int]
-lib.calculate_score.restype = c_int
 
 
 def letter_to_int(letter):
@@ -47,7 +35,7 @@ def get_questions():
 
     conn = db.get_connection()
 
-    # AI QUIZ
+    # AI QUIZ: mixed questions from all categories
     if category == "ai":
 
         rows = conn.execute(
@@ -92,11 +80,13 @@ def submit_quiz():
     username = data.get("username")
     answers_dict = data.get("answers")
 
+    if not username:
+        username = "Anonymous"
+
     if not answers_dict:
         return jsonify({"error": "No answers submitted"}), 400
 
     question_ids = list(map(int, answers_dict.keys()))
-
     placeholders = ",".join(["?"] * len(question_ids))
 
     conn = db.get_connection()
@@ -111,6 +101,10 @@ def submit_quiz():
         question_ids
     ).fetchall()
 
+    if not rows:
+        conn.close()
+        return jsonify({"error": "No matching questions found"}), 404
+
     rows_by_id = {row["id"]: row for row in rows}
 
     answers = []
@@ -119,9 +113,12 @@ def submit_quiz():
 
     for qid in question_ids:
 
+        if qid not in rows_by_id:
+            continue
+
         row = rows_by_id[qid]
 
-        user_answer = answers_dict[str(qid)]
+        user_answer = answers_dict.get(str(qid), "N")
         correct_answer = row["correct"]
 
         answers.append(letter_to_int(user_answer))
@@ -136,14 +133,8 @@ def submit_quiz():
 
     n = len(answers)
 
-    AnswersArray = (c_int * n)(*answers)
-    CorrectArray = (c_int * n)(*correct)
-
-    score = lib.calculate_score(
-        AnswersArray,
-        CorrectArray,
-        n
-    )
+    # Python score calculation for online deployment
+    score = sum(1 for i in range(n) if answers[i] == correct[i])
 
     category = rows[0]["category"]
     difficulty = rows[0]["difficulty"]
@@ -186,7 +177,7 @@ def leaderboard():
         SELECT username, score, total, category,
                difficulty, created_at
         FROM results
-        ORDER BY score DESC
+        ORDER BY score DESC, created_at ASC
         LIMIT 10
         """
     ).fetchall()
@@ -207,6 +198,22 @@ def add_question():
         return jsonify({"error": "Unauthorized"}), 401
 
     data = request.json
+
+    required_fields = [
+        "category",
+        "difficulty",
+        "question",
+        "optA",
+        "optB",
+        "optC",
+        "optD",
+        "correct",
+        "explanation"
+    ]
+
+    for field in required_fields:
+        if field not in data or data[field] == "":
+            return jsonify({"error": f"{field} is required"}), 400
 
     conn = db.get_connection()
 
@@ -247,7 +254,16 @@ def add_question():
     })
 
 
+# ---------------- HEALTH CHECK ----------------
+
+@app.route("/")
+def home():
+    return jsonify({
+        "message": "QuizPro Backend is running successfully"
+    })
+
+
 # ---------------- RUN SERVER ----------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
