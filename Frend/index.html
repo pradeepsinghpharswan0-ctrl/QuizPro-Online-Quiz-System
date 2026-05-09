@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizPro - Online Quiz Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+<div class="particles">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+  <nav class="navbar">
+    <div class="logo">🎯 QuizPro</div>
+
+    <ul class="nav-links">
+      <li><a href="#" id="homeNav">Home</a></li>
+      <li><a href="#" id="aboutNav">About Us</a></li>
+      <li><a href="#" id="leaderboardNav">Leaderboard</a></li>
+    </ul>
+
+    <button type="button" id="adminBtn" class="admin-btn">Admin</button>
+  </nav>
+
+  <section id="loginSection" class="section active">
+    <div class="login-card">
+      <h1>Online Quiz Management System</h1>
+      <p class="subtitle">Test your knowledge with interactive quizzes.</p>
+
+      <input type="text" id="username" placeholder="Enter your name" />
+
+      <button type="button" id="loginBtn">Login</button>
+    </div>
+  </section>
+
+  <section id="homeSection" class="section">
+
+    <div class="hero">
+      <h1 id="welcomeText">Hi, User 👋</h1>
+
+      <p>
+        Welcome to QuizPro — a modern online quiz platform
+        for practicing programming and computer science quizzes.
+      </p>
+    </div>
+
+    <h2 class="section-title">Select Quiz Category</h2>
+
+    <div class="category-container">
+
+      <div class="category-card" data-category="c">
+        <h3>💻 C Programming</h3>
+        <p>Practice C language MCQs</p>
+      </div>
+
+      <div class="category-card" data-category="python">
+        <h3>🐍 Python</h3>
+        <p>Test your Python knowledge</p>
+      </div>
+
+      <div class="category-card" data-category="dbms">
+        <h3>🗄️ DBMS</h3>
+        <p>Database management quizzes</p>
+      </div>
+
+      <div class="category-card" data-category="ai">
+        <h3>🤖 AI Quiz</h3>
+        <p>Smart mixed quiz generated automatically</p>
+      </div>
+
+    </div>
+
+    <div id="difficultyBox" class="difficulty-box hidden">
+      <h2>Select Difficulty</h2>
+
+      <div class="difficulty-buttons">
+        <button type="button" class="difficulty-btn" data-level="easy">Easy</button>
+        <button type="button" class="difficulty-btn" data-level="medium">Medium</button>
+        <button type="button" class="difficulty-btn" data-level="hard">Hard</button>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>© 2026 QuizPro | Created by Pradeep Singh</p>
+    </footer>
+
+  </section>
+
+  <section id="aboutSection" class="section">
+
+    <div class="info-container">
+
+      <div class="info-card">
+        <h2>About Website</h2>
+
+        <p>
+          QuizPro is a full stack Online Quiz Management System developed to help students
+          practice programming and technical subjects through interactive quizzes.
+          The platform provides category-wise quizzes, timer-based assessments,
+          instant score calculation, answer review, leaderboard ranking,
+          and an admin panel for managing questions.
+          The project is built using HTML, CSS, JavaScript, Python Flask,
+          SQLite Database, and C language integration.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h2>Creator Information</h2>
+
+        <p>
+          Created by Pradeep Singh using HTML, CSS,
+          JavaScript, Python Flask, SQLite Database,
+          and C language.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h2>Contact</h2>
+        <p>Email: anime87566@gmail.com</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section id="quizSection" class="section">
+
+    <div class="quiz-card">
+
+      <div class="quiz-top">
+        <h2 id="quizHeading">Quiz</h2>
+        <div id="timer">60s</div>
+      </div>
+
+      <div class="progress-bar">
+        <div id="progress"></div>
+      </div>
+
+      <div id="questionContainer">
+        <h2 id="questionText">Question appears here</h2>
+        <div id="optionsContainer"></div>
+      </div>
+
+      <div class="quiz-buttons">
+        <button type="button" id="submitBtn">Submit Quiz</button>
+        <button type="button" id="nextBtn">Next Question</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section id="resultSection" class="section">
+
+    <div class="result-card">
+
+      <h1>Quiz Completed 🎉</h1>
+
+      <h2 id="scoreText">Your Score: 0/0</h2>
+
+      <div id="reviewContainer"></div>
+
+      <h2>Leaderboard 🏆</h2>
+
+      <div id="leaderboardContainer"></div>
+
+      <button type="button" id="backHomeBtn">Back To Home</button>
+
+    </div>
+
+  </section>
+
+  <section id="leaderboardSection" class="section">
+
+    <div class="result-card">
+
+      <h1>Leaderboard 🏆</h1>
+
+      <div id="leaderboardPageContainer"></div>
+
+      <button type="button" id="leaderboardBackBtn">Back To Home</button>
+
+    </div>
+
+  </section>
+
+  <section id="adminSection" class="section">
+
+    <div class="admin-card">
+
+      <h1>Admin Panel</h1>
+
+      <div id="adminLoginBox">
+        <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
+
+        <button type="button" id="adminLoginBtn">Open Panel</button>
+      </div>
+
+      <div id="adminForm" class="hidden">
+
+        <h2>Add Questions</h2>
+
+        <select id="questionCategory">
+          <option value="c">C Programming</option>
+          <option value="python">Python</option>
+          <option value="dbms">DBMS</option>
+        </select>
+
+        <select id="questionDifficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+        <input type="text" id="questionInput" placeholder="Enter Question">
+
+        <input type="text" id="optionA" placeholder="Option A">
+        <input type="text" id="optionB" placeholder="Option B">
+        <input type="text" id="optionC" placeholder="Option C">
+        <input type="text" id="optionD" placeholder="Option D">
+
+        <select id="correctAnswer">
+          <option value="A">Correct Answer A</option>
+          <option value="B">Correct Answer B</option>
+          <option value="C">Correct Answer C</option>
+          <option value="D">Correct Answer D</option>
+        </select>
+
+        <input type="text" id="explanation" placeholder="Explanation" />
+
+        <button type="button" id="addQuestionBtn">Add Question</button>
+
+      </div>
+
+      <button type="button" id="closeAdminBtn">Close</button>
+
+    </div>
+
+  </section>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
